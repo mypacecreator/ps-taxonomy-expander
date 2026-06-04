@@ -38,8 +38,7 @@ PS Taxonomy Expander makes easy to use categories, tags and custom taxonomies on
 * Requires PHP: 7.4
 
 = 1.2.3 =
-* Compatible up to: 7.0
-* Requires PHP: 7.4
+* Compatible up to: 4.5
 * Fixed Deprecated Error(replace add_object_page to add_menu_page).
 
 = 1.2.2 =

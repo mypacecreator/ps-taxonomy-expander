@@ -38,8 +38,7 @@ PS Taxonomy Expanderは、カテゴリー・タグ、そしてカスタム分類
 * 必須PHPバージョン: 7.4
 
 = 1.2.3 =
-* WordPress 7.0 対応
-* PHP 7.4 以上必須
+* WordPress 4.5 対応
 * 非推奨エラーを修正(add_object_page を add_menu_pageに変更)
 = 1.2.2 =
 * WordPress 4.4 対応
