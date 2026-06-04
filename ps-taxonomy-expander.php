@@ -1076,7 +1076,7 @@ EOF;
 		if ( is_wp_error( $categories ) ) {
 			$categories = array();
 		}
-		$name       = esc_attr( $args['taxonomy'] );
+		$name  = esc_attr( $r['taxonomy'] );
 		$class = esc_attr( $class );
 		$id    = $id ? esc_attr( $id ) : $name;
 
