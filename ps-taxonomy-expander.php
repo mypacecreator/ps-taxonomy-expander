@@ -20,6 +20,8 @@ class PS_Taxonomy_Expander {
 	private $single_taxonomies;
 	private $edit_post_type;
 	private $disp_taxonomies;
+	private $add_tax_columns = array();
+	private $current_taxonomy;
 
 	public function __construct() {
 		load_plugin_textdomain( 'ps-taxonomy-expander', false, plugin_basename( dirname( __FILE__ ) ) . '/language' );
@@ -34,6 +36,7 @@ class PS_Taxonomy_Expander {
 			add_action( 'load-edit.php'                  , array( $this, 'add_sc_inline_edit_js' ) );
 			add_action( 'load-options-writing.php'       , array( $this, 'add_default_term_setting_item' ) );
 			add_filter( 'whitelist_options'              , array( $this, 'allow_default_term_setting' ) );
+			add_filter( 'allowed_options'                , array( $this, 'allow_default_term_setting' ) );
 			add_action( 'load-options.php'               , array( $this, 'check_single_taxonomies_postdata' ) );
 			add_action( 'admin_menu'                     , array( $this, 'add_media_taxonomy_menu' ) );
 			add_filter( 'attachment_fields_to_edit'      , array( $this, 'replace_attachement_taxonomy_input_to_check' ), 100, 2 );
@@ -49,6 +52,7 @@ class PS_Taxonomy_Expander {
 			add_filter( 'plugin_action_links'            , array( $this, 'plugin_term_order_links' ), 10, 2 );
 			add_action( 'load-options-writing.php'       , array( $this, 'add_tax_column_settings' ) );
 			add_filter( 'whitelist_options'              , array( $this, 'allow_list_display_tax_setting' ) );
+			add_filter( 'allowed_options'                , array( $this, 'allow_list_display_tax_setting' ) );
 			add_action( 'restrict_manage_posts'          , array( $this, 'add_filter_tax_dropdown' ) );
 			add_action( 'wp_ajax_inline-save'            , array( $this, 'get_tax_columns' ), 0 );
 		}
@@ -143,7 +147,7 @@ EOF;
 	public function remove_inline_edit_post_js() {
 		global $wp_version;
 		wp_dequeue_script( 'inline-edit-post' );
-		if ( version_compare( $wp_version, '3.3.x', '>=' ) ) {
+		if ( version_compare( $wp_version, '3.3', '>=' ) ) {
 			wp_enqueue_script( 'suggest' );
 		}
 	}
@@ -151,17 +155,17 @@ EOF;
 
 	public function add_sc_inline_edit_js() {
 		global $wp_version;
-		if ( version_compare( $wp_version, '3.1.x', '<' ) ) {
+		if ( version_compare( $wp_version, '3.1', '<' ) ) {
 			$file = 'ps-inline-edit.3.0.js';
-		} elseif ( version_compare( $wp_version, '3.4.x', '<' ) ) {
+		} elseif ( version_compare( $wp_version, '3.4', '<' ) ) {
 			$file = 'ps-inline-edit.3.1.js';
-		} elseif ( version_compare( $wp_version, '4.2.x', '<' ) ) {
+		} elseif ( version_compare( $wp_version, '4.2', '<' ) ) {
 			$file = 'ps-inline-edit.3.4.js';
 		} else {
 			$file = 'ps-inline-edit.4.2.js';
 		}
-		wp_enqueue_script( 'sc-inline-edit', WP_PLUGIN_URL . '/' . plugin_basename( dirname( __FILE__ ) ) . '/js/' . $file, array(), $this->version, true );
-		if ( version_compare( $wp_version, '3.4.x', '>=' ) ) {
+		wp_enqueue_script( 'sc-inline-edit', plugin_dir_url( __FILE__ ) . 'js/' . $file, array(), $this->version, true );
+		if ( version_compare( $wp_version, '3.4', '>=' ) ) {
 			wp_localize_script(
 				'sc-inline-edit',
 				'inlineEditL10n',
@@ -234,8 +238,13 @@ EOF;
 	public function default_term_setting_field( $args ) {
 		$option_name  = $args['post_type'] . '_default_' . $args['taxonomy']->name;
 		$default_term = get_option( $option_name );
-		$terms        = get_terms( $args['taxonomy']->name, 'hide_empty=0' );
-		if ( $terms ) :
+		$terms        = get_terms(
+			array(
+				'taxonomy'   => $args['taxonomy']->name,
+				'hide_empty' => false,
+			)
+		);
+		if ( ! is_wp_error( $terms ) && $terms ) :
 			?>
 			<select name="<?php echo $option_name; ?>">
 				<option value="0"><?php _e( 'unset', 'ps-taxonomy-expander' ); ?></option>
@@ -375,7 +384,12 @@ EOF;
 		if ( $form_fields ) {
 			foreach ( $form_fields as $taxonomy => $obj ) {
 				if ( isset( $obj['hierarchical'] ) && $obj['hierarchical'] ) {
-					$terms         = get_terms( $taxonomy, array( 'get' => 'all' ) );
+					$terms         = get_terms(
+						array(
+							'taxonomy'   => $taxonomy,
+							'hide_empty' => false,
+						)
+					);
 					$taxonomy_tree = array();
 					$branches      = array();
 					$term_id_arr   = array();
@@ -860,10 +874,11 @@ EOF;
 
 	public function display_taxonomy_fields( $args ) {
 		$taxonomies = get_object_taxonomies( $args['post_type'], 'object' );
+		$display_taxonomies = isset( $this->disp_taxonomies[$args['post_type']] ) && is_array( $this->disp_taxonomies[$args['post_type']] ) ? $this->disp_taxonomies[$args['post_type']] : array();
 		if ( ! empty( $taxonomies ) ) {
 			foreach ( $taxonomies as $tax_slug => $taxonomy ) {
 				if ( !in_array( $tax_slug, array( 'category', 'post_tag' ) ) && $taxonomy->show_ui !== false ) {
-					$checked = in_array( $tax_slug, $this->disp_taxonomies[$args['post_type']] ) ? ' checked="checked"' : '';
+					$checked = in_array( $tax_slug, $display_taxonomies ) ? ' checked="checked"' : '';
 					echo '<label for="' . esc_attr( $args['post_type'] ) . '_list_taxonomies_' . esc_attr( $tax_slug ) . '"><input type="checkbox" id="' . esc_attr( $args['post_type'] ) . '_list_taxonomies_' . esc_attr( $tax_slug ) . '" name="' . esc_attr( $args['post_type'] ) . '_list_taxonomies[' . esc_attr( $tax_slug ) . ']" value="' . esc_attr( $tax_slug ) . '"' . $checked . ' /> ' . esc_html( $taxonomy->labels->name ) . '</label>';
 				}
 			}
@@ -949,7 +964,10 @@ EOF;
 			$tab_index_attribute = " tabindex=\"$tab_index\"";
 		}
 
-		$categories = get_terms( $taxonomy, $r );
+		$categories = get_terms( $r );
+		if ( is_wp_error( $categories ) ) {
+			$categories = array();
+		}
 		$name       = esc_attr( $args['taxonomy'] );
 		$class      = esc_attr( $class );
 		$id         = $id ? esc_attr( $id ) : $name;
