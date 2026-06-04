@@ -38,7 +38,7 @@ msgstr "設定しない"
 #: ps-taxonomy-expander/ps-taxonomy-expander.php:199
 #: ps-taxonomy-expander/ps-taxonomy-expander.php:367
 #, php-format
-msgid "%s is not registerd."
+msgid "%s is not registered."
 msgstr "%sが登録されていません。"
 
 #: ps-taxonomy-expander/ps-taxonomy-expander.php:212

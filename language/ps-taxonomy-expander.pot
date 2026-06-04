@@ -38,7 +38,7 @@ msgstr ""
 #: ps-taxonomy-expander/ps-taxonomy-expander.php:186
 #: ps-taxonomy-expander/ps-taxonomy-expander.php:352
 #, php-format
-msgid "%s is not registerd."
+msgid "%s is not registered."
 msgstr ""
 
 #: ps-taxonomy-expander/ps-taxonomy-expander.php:200
