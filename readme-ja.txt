@@ -1,7 +1,8 @@
 === PS Taxonomy Expander ===
 Contributors: jim912, gatespace, kuck1u
 Tags: category, tag, taxonomy, custom taxonomy
-Requires at least: 3.0
+Requires at least: 7.0
+Requires PHP: 7.4
 Tested up to: 7.0
 Stable tag: 1.2.3
 
@@ -33,7 +34,8 @@ PS Taxonomy Expanderは、カテゴリー・タグ、そしてカスタム分類
 
 == Changelog ==
 = 1.2.3 =
-* WordPress 4.5 対応
+* WordPress 7.0 対応
+* PHP 7.4 以上必須
 * 非推奨エラーを修正(add_object_page を add_menu_pageに変更)
 = 1.2.2 =
 * WordPress 4.4 対応

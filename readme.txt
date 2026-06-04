@@ -1,7 +1,8 @@
 === PS Taxonomy Expander ===
 Contributors: jim912, gatespace, kuck1u
 Tags: category, tag, taxonomy, custom taxonomy
-Requires at least: 3.0
+Requires at least: 7.0
+Requires PHP: 7.4
 Tested up to: 7.0
 Stable tag: 1.2.3
 
@@ -33,7 +34,8 @@ PS Taxonomy Expander makes easy to use categories, tags and custom taxonomies on
 
 == Changelog ==
 = 1.2.3 =
-* Compatible up to: 4.5
+* Compatible up to: 7.0
+* Requires PHP: 7.4
 * Fixed Deprecated Error(replace add_object_page to add_menu_page).
 
 = 1.2.2 =

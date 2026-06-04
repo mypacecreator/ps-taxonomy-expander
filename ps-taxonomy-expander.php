@@ -7,6 +7,8 @@ if ( !defined( 'ABSPATH' ) ) {
  Plugin Name: PS Taxonomy Expander
  Plugin URI: http://www.warna.info/archives/451/
  Description: PS Taxonomy Expander makes easy to use categories, tags and custom taxonomies on editing posts.
+ Requires at least: 7.0
+ Requires PHP: 7.4
  Author: Hitoshi Omagari
  Version: 1.2.3
  License: GPLv2 or later
@@ -35,7 +37,6 @@ class PS_Taxonomy_Expander {
 			add_action( 'admin_head-edit.php'            , array( $this, 'remove_inline_edit_post_js' ) );
 			add_action( 'load-edit.php'                  , array( $this, 'add_sc_inline_edit_js' ) );
 			add_action( 'load-options-writing.php'       , array( $this, 'add_default_term_setting_item' ) );
-			add_filter( 'whitelist_options'              , array( $this, 'allow_default_term_setting' ) );
 			add_filter( 'allowed_options'                , array( $this, 'allow_default_term_setting' ) );
 			add_action( 'load-options.php'               , array( $this, 'check_single_taxonomies_postdata' ) );
 			add_action( 'admin_menu'                     , array( $this, 'add_media_taxonomy_menu' ) );
@@ -51,7 +52,6 @@ class PS_Taxonomy_Expander {
 			add_action( 'admin_print_styles-edit.php'    , array( $this, 'add_tax_column_styles' ) );
 			add_filter( 'plugin_action_links'            , array( $this, 'plugin_term_order_links' ), 10, 2 );
 			add_action( 'load-options-writing.php'       , array( $this, 'add_tax_column_settings' ) );
-			add_filter( 'whitelist_options'              , array( $this, 'allow_list_display_tax_setting' ) );
 			add_filter( 'allowed_options'                , array( $this, 'allow_list_display_tax_setting' ) );
 			add_action( 'restrict_manage_posts'          , array( $this, 'add_filter_tax_dropdown' ) );
 			add_action( 'wp_ajax_inline-save'            , array( $this, 'get_tax_columns' ), 0 );
@@ -246,7 +246,7 @@ EOF;
 		);
 		if ( ! is_wp_error( $terms ) && $terms ) :
 			?>
-			<select name="<?php echo $option_name; ?>">
+			<select name="<?php echo esc_attr( $option_name ); ?>">
 				<option value="0"><?php _e( 'unset', 'ps-taxonomy-expander' ); ?></option>
 				<?php foreach ( $terms as $term ) : ?>
 					<option value="<?php echo esc_attr( $term->term_id ); ?>"
@@ -390,6 +390,9 @@ EOF;
 							'hide_empty' => false,
 						)
 					);
+					if ( is_wp_error( $terms ) ) {
+						continue;
+					}
 					$taxonomy_tree = array();
 					$branches      = array();
 					$term_id_arr   = array();
