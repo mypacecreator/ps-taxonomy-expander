@@ -285,7 +285,7 @@ EOF;
 				<?php endforeach; ?>
 			</select>
 		<?php else : ?>
-			<p><?php printf( __( '%s is not registerd.', 'ps-taxonomy-expander' ), esc_html( $args['taxonomy']->labels->singular_name ), esc_html( $args['taxonomy']->labels->name ) ); ?></p>
+			<p><?php printf( __( '%s is not registered.', 'ps-taxonomy-expander' ), esc_html( $args['taxonomy']->labels->singular_name ), esc_html( $args['taxonomy']->labels->name ) ); ?></p>
 			<?php
 		endif;
 	}
@@ -479,7 +479,7 @@ EOF;
 						$form_fields[ $taxonomy ]['checkbox'] = $html;
 					} else {
 						$form_fields[ $taxonomy ]['input'] = 'html';
-						$form_fields[ $taxonomy ]['html']  = sprintf( __( '%s is not registerd.', 'ps-taxonomy-expander' ), esc_html( $obj['labels']->singular_name ), esc_html( $obj['labels']->name ) );
+						$form_fields[ $taxonomy ]['html']  = sprintf( __( '%s is not registered.', 'ps-taxonomy-expander' ), esc_html( $obj['labels']->singular_name ), esc_html( $obj['labels']->name ) );
 					}
 				}
 			}
@@ -1147,7 +1147,7 @@ class PS_TaxonomyDropdown extends Walker_CategoryDropdown {
 		$pad = str_repeat( '&nbsp;', $depth * 3 );
 
 		$term_name = apply_filters( 'list_cats', $term->name, $term );
-		$output   .= "\t<option class=\"level-$depth\" value=\"" . esc_attr( $term->slug ) . '"';
+		$output   .= "\t<option class=\"level-$depth\" value=\"" . esc_attr( $term->slug ) . "\"";
 		if ( $term->slug == $args['selected'] ) {
 			$output .= ' selected="selected"';
 		}
