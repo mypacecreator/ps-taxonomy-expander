@@ -4,7 +4,7 @@ Tags: category, tag, taxonomy, custom taxonomy
 Requires at least: 7.0
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 
 カテゴリー、タグ、カスタム分類の使い勝手を向上させます。
 
@@ -33,6 +33,10 @@ PS Taxonomy Expanderは、カテゴリー・タグ、そしてカスタム分類
 3. 投稿設定で分類の登録方法、初期分類、一覧表示への追加の設定ができます。Term orderメニューでは、順序指定が可能です。
 
 == Changelog ==
+= 1.2.4 =
+* 必須WordPressバージョン: 7.0
+* 必須PHPバージョン: 7.4
+
 = 1.2.3 =
 * WordPress 7.0 対応
 * PHP 7.4 以上必須

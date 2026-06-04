@@ -10,7 +10,7 @@ if ( !defined( 'ABSPATH' ) ) {
  Requires at least: 7.0
  Requires PHP: 7.4
  Author: Hitoshi Omagari
- Version: 1.2.3
+ Version: 1.2.4
  License: GPLv2 or later
  Text Domain: ps-taxonomy-expander
  Domain Path: /language/
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
 
 
 class PS_Taxonomy_Expander {
-	private $version = '1.2.3';
+	private $version = '1.2.4';
 	private $single_taxonomies;
 	private $edit_post_type;
 	private $disp_taxonomies;

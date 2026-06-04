@@ -4,7 +4,7 @@ Tags: category, tag, taxonomy, custom taxonomy
 Requires at least: 7.0
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 
 Makes categories, tags and custom taxonomies more useful.
 
@@ -33,6 +33,10 @@ PS Taxonomy Expander makes easy to use categories, tags and custom taxonomies on
 3. You can specify taxonomy selection, default taxonomy and display taxonomies on All posts. You can specify order of taxonomies on Term order menu.
 
 == Changelog ==
+= 1.2.4 =
+* Requires at least: 7.0
+* Requires PHP: 7.4
+
 = 1.2.3 =
 * Compatible up to: 7.0
 * Requires PHP: 7.4
